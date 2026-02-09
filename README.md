@@ -1,2 +1,76 @@
-# librenms-raspberrypi-isp-monitoring
-LibreNMS monitoring setup on Raspberry Pi 5 for ISP infrastructure using Huawei switches, SNMP and Telegram alerts.
+# LibreNMS Raspberry Pi ISP Monitoring Setup
+
+## Overview
+
+This project documents the deployment of a **LibreNMS network monitoring system** running on a **Raspberry Pi 5**, designed for monitoring ISP infrastructure including Huawei switches using SNMP.
+
+The setup focuses on:
+
+* Lightweight monitoring hardware
+* Safe dual-NMS SNMP configuration
+* VLAN-based management networks
+* Telegram alert integration
+* Reliable alert delivery using LibreNMS queue workers
+
+This repository contains the **final working configuration** after deployment and validation.
+
+---
+
+## Hardware Used
+
+* Raspberry Pi 5 (4GB RAM)
+* MicroSD Storage
+* Huawei S6700 Series 10G Switch
+* ISP Access Network (OLT + Access Switches)
+
+---
+
+## Software Stack
+
+* Raspberry Pi OS (Debian based)
+* LibreNMS
+* MariaDB
+* Apache2
+* SNMP (v2c)
+* Telegram Bot API
+
+---
+
+## Network Architecture (Summary)
+
+* Raspberry Pi acts as the Network Management System (NMS)
+* Management traffic routed through VLAN-based infrastructure
+* Huawei switch monitored using a dedicated read-only SNMP community
+* Existing ISP monitoring configuration remains untouched
+
+---
+
+## Project Structure
+
+```
+architecture/
+raspberry-pi/
+librenms/
+huawei-switch/
+alerts/
+```
+
+Each section explains the final configuration used in production.
+
+---
+
+## Features Implemented
+
+* LibreNMS deployment on Raspberry Pi
+* Headless optimized server configuration
+* SNMP monitoring for Huawei VRP devices
+* Dual SNMP manager support (ISP NMS + LibreNMS)
+* Telegram alert notifications
+* Queue-based alert processing
+
+---
+
+## Disclaimer
+
+All configurations are generalized for documentation purposes.
+Sensitive information such as real IP addresses, credentials, and ISP-specific data have been removed or anonymized.
