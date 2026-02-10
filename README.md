@@ -10,7 +10,6 @@ The setup focuses on:
 * Safe dual-NMS SNMP configuration
 * VLAN-based management networks
 * Telegram alert integration
-* Reliable alert delivery using LibreNMS queue workers
 
 This repository contains the **final working configuration** after deployment and validation.
 
@@ -66,11 +65,7 @@ Each section explains the final configuration used in production.
 * SNMP monitoring for Huawei VRP devices
 * Dual SNMP manager support (ISP NMS + LibreNMS)
 * Telegram alert notifications
-* Queue-based alert processing
 
 ---
 
-## Disclaimer
-
-All configurations are generalized for documentation purposes.
-Sensitive information such as real IP addresses, credentials, and ISP-specific data have been removed or anonymized.
+NB : I have also configured Wireguard VPN on the same raspberry pi for remote access, i have created a seperate repository guiding the configurations
