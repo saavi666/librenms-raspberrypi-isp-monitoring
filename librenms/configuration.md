@@ -1,115 +1,93 @@
-# Raspberry Pi Setup
+# LibreNMS Configuration
 
 ## Overview
 
-The LibreNMS server runs on a Raspberry Pi 5 configured as a dedicated headless monitoring system. The system is optimized for stability and low resource usage while continuously polling network infrastructure devices.
+LibreNMS is deployed as the central Network Management System (NMS) for monitoring infrastructure devices using SNMP. The configuration described here reflects the final operational state after successful deployment.
 
-This document describes the **final operational configuration** after deployment.
-
----
-
-## Hardware Platform
-
-* Raspberry Pi 5
-* 4 GB RAM
-* MicroSD storage
-* Gigabit Ethernet connectivity
-
-The device operates as an always-on monitoring appliance.
+The system monitors network devices without modifying existing device configurations used by other monitoring systems.
 
 ---
 
-## Operating System
+## Device Onboarding
 
-* Raspberry Pi OS (Debian-based)
-* Updated to latest stable packages
-* SSH enabled for remote administration
-* Desktop environment disabled
+Devices are added to LibreNMS using SNMP v2c read-only access.
 
-The system operates entirely in headless mode.
+Required parameters:
 
----
+* Device management IP address
+* SNMP version: v2c
+* Read-only community string
 
-## Headless Configuration
+After addition, LibreNMS automatically:
 
-The graphical desktop environment is disabled to reduce CPU and memory usage.
-
-System default target:
-
-```
-multi-user.target
-```
-
-This allows system resources to be dedicated to:
-
-* LibreNMS polling
-* Database operations
-* SNMP communication
-* Alert processing
+* Detects device operating system
+* Discovers interfaces and sensors
+* Begins periodic polling
+* Generates performance graphs
 
 ---
 
-## Network Configuration
+## SNMP Polling Workflow
 
-The Raspberry Pi uses multiple logical network paths:
+LibreNMS interacts with devices using standard SNMP polling:
 
-### Infrastructure VLAN Interface
+1. LibreNMS sends SNMP requests from the infrastructure VLAN interface.
+2. Network devices respond through their SNMP agent.
+3. Collected metrics are stored in the monitoring database.
+4. Historical data is used for graph generation and alert evaluation.
 
-* Used for SNMP communication with switches and infrastructure devices.
-* LibreNMS polling traffic originates from this interface.
-
-### Local LAN Interface
-
-* Used for administrative access to the LibreNMS web interface.
-* Not used for infrastructure monitoring traffic.
-
-This separation ensures predictable routing and management isolation.
+Polling occurs automatically at defined intervals.
 
 ---
 
-## Enabled Services
+## Device Discovery and Polling
 
-The following services are required for normal operation:
+LibreNMS performs two primary background operations:
 
-* apache2
-* mariadb
-* snmpd
-* ssh
-* cron
-* NetworkManager
-* librenms.service
-* librenms-watchdog.service
+### Discovery
 
-These services form the core LibreNMS runtime environment.
+* Detects new interfaces and sensors.
+* Updates device metadata.
+* Runs periodically.
 
----
+### Polling
 
-## Disabled Services
+* Collects operational metrics.
+* Updates device status.
+* Stores performance data.
 
-Non-essential desktop and consumer services are disabled to reduce system load:
-
-* graphical desktop manager
-* printing services (CUPS)
-* avahi/mDNS services
-* bluetooth services
-* unused cloud initialization services
-
-This reduces background resource usage and improves long-term stability.
+These processes run automatically as part of LibreNMS services.
 
 ---
 
-## LibreNMS Runtime Model
+## Alert Rules
 
-LibreNMS runs as a service-based application:
+Alert rules are configured to monitor device availability and operational status.
 
-* Polling performed automatically by LibreNMS services.
-* Device discovery and polling executed periodically.
-* Alert evaluation performed within LibreNMS alert engine.
+Typical alert conditions include:
 
-The Raspberry Pi operates as a dedicated monitoring node with no additional workloads.
+* Device unreachable
+* Interface down events
+* Critical device status changes
+
+Alert rules evaluate device state continuously and trigger notifications when conditions are met.
+
+---
+
+## Alert Transport
+
+Telegram is configured as the primary alert transport.
+
+When an alert condition is triggered:
+
+1. LibreNMS evaluates the alert rule.
+2. The alert is passed to the configured transport.
+3. A notification is delivered to Telegram via bot API.
+
+This provides immediate operational visibility without requiring access to the LibreNMS interface.
 
 ---
 
 ## Summary
 
-This configuration transforms the Raspberry Pi into a low-power, always-on network monitoring appliance capable of reliably monitoring ISP infrastructure devices using SNMP.
+LibreNMS operates as an automated monitoring system that continuously polls network devices, stores operational metrics, and generates alerts when abnormal conditions are detected. The configuration prioritizes stability, read-only monitoring, and safe coexistence with existing monitoring platforms.
