@@ -68,4 +68,6 @@ Each section explains the final configuration used in production.
 
 ---
 
-NB : The seperate VLAN configurations done in the raspberry pi and huawei switch are in a seperate repository "github.com/saavi666/raspberrypi-vpn-network-management". That repo also include the setup of Wireguard VPN using piVPN for remote access to the LAN for monitoring and management purposes.
+Note:
+1. The deployment folder contains the final configurations done for the setup on NMS using LibreNMS and huawei switch.
+2. The seperate VLAN configurations done in the raspberry pi and huawei switch are in a seperate repository "github.com/saavi666/raspberrypi-vpn-network-management". That repo also include the setup of Wireguard VPN using piVPN for remote access to the LAN for monitoring and management purposes.
