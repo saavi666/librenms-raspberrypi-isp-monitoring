@@ -41,7 +41,7 @@ The chat ID is used by LibreNMS to deliver alerts to the correct recipient.
 
 Telegram is added as an alert transport inside LibreNMS:
 
-* Navigate to **Settings → Alerting → Alert Transports**
+* Navigate to **Alerts → Alert Transports**
 * Add a new transport
 * Select **Telegram**
 * Enter the bot token
@@ -52,22 +52,18 @@ Once saved, LibreNMS can send notifications directly to Telegram.
 
 ---
 
-## Alert Rule Integration
+## LibreNMS Template Configuration
 
-Alert rules are configured to use the Telegram transport.
+Templates are created for each alert rules:
 
-When an alert condition is triggered:
+* Navigate to **Alerts → Alert Templates**
+* Add a new template
+* Type a message structure as the template
+* Select the alert rule assosiated with the template
 
-1. LibreNMS evaluates the alert rule.
-2. The alert is passed to the Telegram transport.
-3. A notification is delivered to the configured chat.
+Once saved, LibreNMS can send those templates directly to Telegram.
 
-Typical alert conditions include:
-
-* Device down events
-* Interface status changes
-* Critical device conditions
-
+NB : Make sure that the transport rule is set to default (if you only have one transport) or explicitly to telegram for alert delivert. 
 ---
 
 ## Verification
