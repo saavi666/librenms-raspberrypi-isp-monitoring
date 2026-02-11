@@ -4,8 +4,6 @@
 
 This document contains the commands and configuration steps used to prepare the Raspberry Pi as a dedicated LibreNMS monitoring server.
 
-Only the final operational configuration is included. Troubleshooting steps are intentionally omitted.
-
 ---
 
 ## System Update
@@ -37,7 +35,6 @@ System boots without graphical desktop.
 Purpose: Reduce background resource usage and prevent unnecessary services from running on a monitoring server.
 
 ```bash
-sudo systemctl disable --now cups.service cups.socket cups.path
 sudo systemctl disable --now avahi-daemon.service avahi-daemon.socket
 sudo systemctl disable --now bluetooth.service
 ```
