@@ -68,7 +68,6 @@ Purpose: Ensure LibreNMS background services are active.
 
 ```bash
 systemctl status librenms.service
-systemctl status librenms-watchdog.service
 ```
 
 Expected Result:
