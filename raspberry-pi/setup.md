@@ -72,8 +72,6 @@ The following services are required for normal operation:
 * ssh
 * cron
 * NetworkManager
-* librenms.service
-* librenms-watchdog.service
 
 These services form the core LibreNMS runtime environment.
 
