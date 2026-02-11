@@ -68,4 +68,4 @@ Each section explains the final configuration used in production.
 
 ---
 
-NB : The seperate VLAN configurations done in the raspberry pi and huawei switch are in a seperate repository by me. That repo also include the setup of Wireguard VPN using piVPN for remote access to the LAN for monitoring and management purposes.
+NB : The seperate VLAN configurations done in the raspberry pi and huawei switch are in a seperate repository "github.com/saavi666/raspberrypi-vpn-network-management". That repo also include the setup of Wireguard VPN using piVPN for remote access to the LAN for monitoring and management purposes.
