@@ -28,7 +28,6 @@ The architecture was designed with the following objectives:
 
 * Runs LibreNMS, MariaDB, Apache, and SNMP services.
 * Operates as the Network Management System.
-* Configured in headless mode for reduced resource usage.
 * Connected to infrastructure VLAN for management access.
 
 ### Huawei 10G Switch
