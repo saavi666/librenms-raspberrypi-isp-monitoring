@@ -68,4 +68,4 @@ Each section explains the final configuration used in production.
 
 ---
 
-NB : I have also configured Wireguard VPN on the same raspberry pi for remote access, i have created a seperate repository guiding the configurations
+NB : The seperate VLAN configurations done in the raspberry pi and huawei switch are in a seperate repository by me. That repo also include the setup of Wireguard VPN using piVPN for remote access to the LAN for monitoring and management purposes.
