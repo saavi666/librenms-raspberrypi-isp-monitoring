@@ -64,6 +64,7 @@ Templates are created for each alert rules:
 Once saved, LibreNMS can send those templates directly to Telegram.
 
 NB : Make sure that the transport rule is set to default (if you only have one transport) or explicitly to telegram for alert delivert. 
+
 ---
 
 ## Verification
