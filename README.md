@@ -4,24 +4,6 @@
 
 This project documents the deployment of a **LibreNMS network monitoring system** running on a **Raspberry Pi 5**, designed for monitoring ISP infrastructure including Huawei switches using SNMP.
 
-The setup focuses on:
-
-* Lightweight monitoring hardware
-* Safe dual-NMS SNMP configuration
-* VLAN-based management networks
-* Telegram alert integration
-
-This repository contains the **final working configuration** after deployment and validation.
-
----
-
-## Hardware Used
-
-* Raspberry Pi 5 (4GB RAM)
-* MicroSD Storage
-* Huawei S6700 Series 10G Switch
-* ISP Access Network (OLT + Access Switches)
-
 ---
 
 ## Software Stack
@@ -55,16 +37,6 @@ alerts/
 ```
 
 Each section explains the final configuration used in production.
-
----
-
-## Features Implemented
-
-* LibreNMS deployment on Raspberry Pi
-* Headless optimized server configuration
-* SNMP monitoring for Huawei VRP devices
-* Dual SNMP manager support (ISP NMS + LibreNMS)
-* Telegram alert notifications
 
 ---
 
