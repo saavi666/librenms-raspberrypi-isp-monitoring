@@ -144,6 +144,29 @@ sudo systemctl restart apache2
 ```
 sudo nano /etc/apache2/sites-available/librenms.conf
 ```
+**if password asked for librenms user, then exit of the terminal and continue the step from a main user profile using
+Paste in nano:
+```
+<VirtualHost *:80>
+  DocumentRoot /opt/librenms/html
+  ServerName librenms.local
+
+  <Directory /opt/librenms/html>
+    AllowOverride All
+    Require all granted
+  </Directory>
+</VirtualHost>
+```
+Enable site:
+```
+sudo a2dissite 000-default.conf
+sudo a2ensite librenms.conf
+sudo systemctl reload apache2
+```
+**you could now access the site http://<pi_ip> from the lan. if not, like the case for me, i have a troubleshooting steps after snmp configurations
+
+---
+### 2.7 Configure SNMP on Pi
 
 
 
