@@ -5,51 +5,55 @@
 This document describes the design flow i had while creating the NMS server. This document also contains the troubleshooting of the issues i encounted while seting up the server
 
 ---
+## 1. Install Required Dependencies
 
-## Hardware Platform
-
-* Raspberry Pi 5
-* 4 GB RAM
-* MicroSD storage
-* Gigabit Ethernet connectivity
-
-The device operates as an always-on monitoring appliance.
-
----
-
-## Operating System
-
-* Raspberry Pi OS (Debian-based)
-* Updated to latest stable packages
-* SSH enabled for remote administration
-* Desktop environment disabled
-
-The system operates entirely in headless mode.
-
----
-
-## Headless Configuration
-
-The graphical desktop environment is disabled to reduce CPU and memory usage.
-
-System default target:
+### 1.1 Update system
 
 ```
-multi-user.target
+sudo apt update && sudo apt upgrade -y
 ```
 
-This allows system resources to be dedicated to the NMS.
+### 1.2 Install required base packages
 
----
+```
+sudo apt install -y \
+apache2 mariadb-server mariadb-client \
+php php-cli php-common php-curl php-gd php-mbstring php-mysql \
+php-snmp php-xml php-zip php-bcmath php-gmp php-intl \
+snmp snmpd rrdtool git unzip curl composer \
+python3 python3-pip python3-venv
+```
 
-## Network Configuration
+### 1.3 Enable Apache modules
 
-The Raspberry Pi uses multiple logical network paths:
+```
+sudo a2enmod rewrite
+sudo a2enmod php*
+sudo systemctl restart apache2
+```
 
-### Infrastructure VLAN Interface
+### 1.4 Enable and start services
 
-* Used for SNMP communication with switches and infrastructure devices.
-* LibreNMS polling traffic originates from this interface.
+```
+sudo systemctl enable apache2 mariadb snmpd
+sudo systemctl start apache2 mariadb snmpd
+```
+
+### 1.5 Secure MariaDB
+
+```
+sudo mysql_secure_installation
+```
+Recommended answers:
+
+```
+Switch to unix_socket auth → No
+Set root password → Yes
+Remove anonymous users → Yes
+Disallow remote root login → Yes
+Remove test database → Yes
+Reload privilege tables → Yes
+```
 
 ### Local LAN Interface
 
