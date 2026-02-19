@@ -163,14 +163,118 @@ sudo a2dissite 000-default.conf
 sudo a2ensite librenms.conf
 sudo systemctl reload apache2
 ```
-**you could now access the site http://<pi_ip> from the lan. if not, like the case for me, i have a troubleshooting steps after snmp configurations
+**you could now access the site http://<pi_ip> from the lan. if not, like the case for me, i have a troubleshooting steps after snmp configurations  *****
 
 ---
 ### 2.7 Configure SNMP on Pi
+```
+sudo cp /opt/librenms/snmpd.conf.example /etc/snmp/snmpd.conf
+sudo nano /etc/snmp/snmpd.conf
+```
+Edit these line:
+* SNMP community string
+```
+com2sec readonly  default  <RANDOMSTRINGGOESHERE>
+```
+replace <RANDOMSTRINGGOESHERE> with any string which will represent the SNMP community which will be used later.
+* System location
+```
+syslocation Rack, Room, Building, City, Country [Lat, Lon]
+```
+eg : syslocation Office Rack 1, Kerala, India
+* System contact
+```
+syscontact Your Name <your@email.address>
+```
+Apply changes
+```
+sudo systemctl restart snmpd
+```
+Test:
+```
+snmpwalk -v2c -c librenmsRO localhost system
+```
+For my case i got an error <Unknown Object Identifier>, thats beacause there is no MIBs installed by default. you could enable MIBs if you prefer but i didnt, So we use numeric OID:
+```
+snmpwalk -v2c -c librenmsRO localhost 1.3.6.1.2.1.1
+```
+if you get an output, that means SNMP is working.
 
+* nest step was to configure librenms from http://<pi_ip> webpage. but in my case the webpage is not loading. so here is the troubleshooting after we continue to 2.7
+### LibreNMS Web UI troubleshooting
+Confirm the Pi’s IP address
+```
+Confirm the Pi’s IP address
+```
+Check Apache status
+```
+sudo systemctl status apache2
+```
+if failed / inactive, RUN:
+```
+sudo systemctl restart apache2
+```
+Check if Apache is listening on port 80
+```
+ss -tuln | grep :80
+```
+if the output is 
+```
+tcp LISTEN 0 511 *:80 *:*
+```
+then Apache IS listening on port 80 to all interfaces (NOT a VLAN or firewall bind issue)
 
+Test Apache without LibreNMS (critical isolation):
+```
+sudo a2dissite librenms.conf
+sudo a2ensite 000-default.conf
+sudo systemctl reload apache2
+```
+Now test:
+```
+curl http://localhost
+```
+expected output : Apache default page HTML output
+* for my case it worked with critical isolation so moving on...
 
+Fix LibreNMS vhost
+```
+sudo a2dissite 000-default.conf
+sudo a2ensite librenms.conf
+sudo systemctl reload apache2
+```
+Fix LibreNMS permissions
+```
+sudo chown -R librenms:librenms /opt/librenms
+sudo chmod 771 /opt/librenms
+sudo setfacl -R -m u:www-data:rwx /opt/librenms
+sudo setfacl -dR -m u:www-data:rwx /opt/librenms
+```
+test again
+```
+curl http://localhost
+```
+* for my case it failed again. Then i used Apache error to find the root cause.
+Check Apache error log
+```
+sudo tail -n 20 /var/log/apache2/error.log
+```
+if you found something similar:
+```
+Failed opening required '/opt/librenms/html/../vendor/autoload.php'
+```
+here is the fix:
 
+Confirm vendor/ is missing (sanity check)
+```
+ls /opt/librenms/vendor
+```
+Expected output
+```
+ls: cannot access '/opt/librenms/vendor': No such file or directory
+```
+then Switch to librenms user
+```
 
 
 
