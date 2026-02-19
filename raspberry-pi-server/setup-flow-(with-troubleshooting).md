@@ -98,6 +98,7 @@ GRANT ALL PRIVILEGES ON librenms.* TO 'librenms'@'localhost';
 FLUSH PRIVILEGES;
 EXIT;
 ```
+Replace 'StrongPassword' with prefered password for LibreNMS login.
 ---
 ## 2. Install LibreNMS
 
@@ -200,7 +201,8 @@ snmpwalk -v2c -c librenmsRO localhost 1.3.6.1.2.1.1
 ```
 if you get an output, that means SNMP is working.
 
-* nest step was to configure librenms from http://<pi_ip> webpage. but in my case the webpage is not loading. so here is the troubleshooting after we continue to 2.7
+* nest step was to configure librenms from http://<pi_ip> webpage. but in my case the webpage is not loading. so here is the troubleshooting. after we continue to 3rd section "librenms web install'
+---
 ### LibreNMS Web UI troubleshooting
 Confirm the Pi’s IP address
 ```
@@ -333,7 +335,16 @@ VERIFY
 curl http://localhost
 ```
 Expected:
-LibreNMS installer HTML
+LibreNMS login HTML
+
+then Open LibreNMS in browser
+```
+http://<pi-ip>/
+```
+You should see the LibreNMS login page. Now continue...
+---
+## LibreNMS web config
+
 ## Summary
 
 This configuration transforms the Raspberry Pi into a low-power, always-on network monitoring appliance capable of reliably monitoring ISP infrastructure devices using SNMP.
