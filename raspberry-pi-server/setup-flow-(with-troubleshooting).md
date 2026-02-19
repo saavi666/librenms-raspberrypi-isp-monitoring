@@ -342,9 +342,93 @@ then Open LibreNMS in browser
 http://<pi-ip>/
 ```
 You should see the LibreNMS login page. Now continue...
----
-## LibreNMS web config
 
+---
+## 3. LibreNMS web installer
+### 3.1 Login
+* login using the username and password configured in mariaDB
+---
+### 3.2 Database configuration
+```
+Host : localhost
+Port : 3306
+User : librenms
+Password : StrongPassword
+Database Name : librenms
+```
+use your credentials in username and password
+
+if you get similar error:
+```
+SQLSTATE[HY000] [1045] Access denied for user 'librenms'@'localhost' (using password: YES)
+```
+the follow the steps below
+
+Log in to MariaDB as root
+```
+sudo mariadb
+```
+In MariaDB Verify librenms DB user exists
+```
+SELECT user, host FROM mysql.user WHERE user='librenms';
+```
+make sure you see librenms user
+
+Re-grant permissions
+```
+GRANT ALL PRIVILEGES ON librenms.* TO 'librenms'@'localhost';
+FLUSH PRIVILEGES;
+```
+```
+EXIT;
+```
+then i got next error
+```
+Build Database Starting Update... Error: index.php must be run as the user librenms. Error!
+```
+This error can fixed by building the database once from CLI as librenms
+```
+sudo su - librenms
+cd /opt/librenms
+./lnms migrate
+```
+migration will not be successfull and will give a error
+```
+Access denied for user 'librenms'@'localhost' (using password: NO)
+```
+Modern LibreNMS (Laravel-based) does NOT read DB credentials from the web form Instead, it reads them from a file:
+```
+/opt/librenms/.env
+```
+Fix:
+
+Open the LibreNMS environment file
+```
+cd /opt/librenms
+nano .env
+```
+Replace the commented DB section (remove #)
+```
+DB_HOST=localhost
+DB_PORT=3306
+DB_DATABASE=librenms
+DB_USERNAME=librenms
+DB_PASSWORD=NewStrongPassword
+```
+save the nano file
+
+Clear config cache
+```
+./lnms config:clear
+```
+Run migration
+```
+./lnms migrate
+```
+after this step continue in the browser 
+```
+http://<pi_ip>
+```
 ## Summary
 
 This configuration transforms the Raspberry Pi into a low-power, always-on network monitoring appliance capable of reliably monitoring ISP infrastructure devices using SNMP.
