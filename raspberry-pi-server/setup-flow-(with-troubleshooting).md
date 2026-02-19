@@ -1,4 +1,4 @@
-# Raspberry Pi Setup (with troubleshooting flow)
+# Raspberry Pi LibreNMS configuration flow (with troubleshooting)
 
 ## Overview
 
@@ -275,9 +275,65 @@ ls: cannot access '/opt/librenms/vendor': No such file or directory
 ```
 then Switch to librenms user
 ```
-
-
-
+sudo su - librenms
+```
+Go to LibreNMS directory
+```
+cd /opt/librenms
+```
+Verify location
+```
+pwd
+```
+expected output:
+```
+/opt/librenms
+```
+VERIFY, Run:
+```
+ls
+```
+expected output(sammple):
+```
+LICENSE
+README.md
+html
+scripts
+composer.json
+composer.lock
+```
+run Composer (critical fix)
+```
+./scripts/composer_wrapper.php install --no-dev
+```
+expected output(sammple):
+```
+Loading composer repositories with package information
+Installing dependencies from lock file
+Generating optimized autoload files
+```
+VERIFY vendor directory
+```
+ls vendor/autoload.php
+```
+Expected:
+```
+vendor/autoload.php
+```
+exit out of librenms user
+```
+exit
+```
+Restart Apache:
+```
+sudo systemctl restart apache2
+```
+VERIFY
+```
+curl http://localhost
+```
+Expected:
+LibreNMS installer HTML
 ## Summary
 
 This configuration transforms the Raspberry Pi into a low-power, always-on network monitoring appliance capable of reliably monitoring ISP infrastructure devices using SNMP.
