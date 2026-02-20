@@ -458,18 +458,17 @@ After this step i got an error:
 ```
 Could not ping <pi_ip>
 ```
-The following steps undergo the fix of the issue, start with checking the snmp from pi
+The following steps undergo the fix of the issue, it is caused since polling is not happening but the device is added successfully.
 
-Check SNMP service is running
+Enable LibreNMS poller service
 ```
-systemctl status snmpd
+Enable LibreNMS poller service
 ```
-If its active and running we are fine.
+Enable watchdog
+```
+sudo systemctl enable --now librenms-watchdog
+```
 
-Test SNMP using numeric OID
-```
-snmpwalk -v2c -c librenmsRO 127.0.0.1 1.3.6.1.2.1.1
-```
 
 
 ## Summary
