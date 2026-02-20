@@ -460,15 +460,29 @@ Could not ping <pi_ip>
 ```
 The following steps undergo the fix of the issue, it is caused since polling is not happening but the device is added successfully.
 
-Enable LibreNMS poller service
+Install the LibreNMS systemd service
 ```
-Enable LibreNMS poller service
+sudo cp /opt/librenms/misc/librenms.service /etc/systemd/system/
+sudo cp /opt/librenms/misc/librenms-watchdog.service /etc/systemd/system/
 ```
-Enable watchdog
+Reload systemd
 ```
-sudo systemctl enable --now librenms-watchdog
+sudo systemctl daemon-reload
 ```
-
+Enable & start LibreNMS poller
+```
+sudo systemctl enable --now librenms.service
+```
+Enable & start watchdog
+```
+sudo systemctl enable --now librenms-watchdog.service
+```
+Verify services are running
+```
+systemctl status librenms.service
+systemctl status librenms-watchdog.service
+```
+in my case the above services were not in running state. it was in
 
 
 ## Summary
