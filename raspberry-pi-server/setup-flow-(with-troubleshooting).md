@@ -99,6 +99,7 @@ FLUSH PRIVILEGES;
 EXIT;
 ```
 Replace 'StrongPassword' with prefered password for LibreNMS login.
+
 ---
 ## 2. Install LibreNMS
 
@@ -429,6 +430,31 @@ after this step continue in the browser
 ```
 http://<pi_ip>
 ```
+on next page
+
+Recommended final selection (summary)
+```
+Update Channel:	Daily
+Theme:	Device
+Usage Reports:	Enabled
+Error Reports:	Enabled
+```
+Now you could probably see the libreNMS dashboard page. we have successfully completed the installation part now we can continue to add device
+```
+Devices → All Devices
+```
+then
+```
+Hostname: <pi_ip>
+SNMP: ON
+SNMP Version: v2c
+Port: (blank) #default 161
+Transport: udp
+Port Association Mode: ifIndex
+Community: librenmsRO
+Force add: OFF
+```
+
 ## Summary
 
 This configuration transforms the Raspberry Pi into a low-power, always-on network monitoring appliance capable of reliably monitoring ISP infrastructure devices using SNMP.
