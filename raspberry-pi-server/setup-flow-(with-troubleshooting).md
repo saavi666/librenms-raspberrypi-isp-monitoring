@@ -454,6 +454,23 @@ Port Association Mode: ifIndex
 Community: librenmsRO
 Force add: OFF
 ```
+After this step i got an error:
+```
+Could not ping <pi_ip>
+```
+The following steps undergo the fix of the issue, start with checking the snmp from pi
+
+Check SNMP service is running
+```
+systemctl status snmpd
+```
+If its active and running we are fine.
+
+Test SNMP using numeric OID
+```
+snmpwalk -v2c -c librenmsRO 127.0.0.1 1.3.6.1.2.1.1
+```
+
 
 ## Summary
 
