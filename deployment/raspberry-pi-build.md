@@ -1,85 +1,76 @@
-# Raspberry Pi Deployment Reference
+# LibreNMS Setup
 
 ## Overview
 
-This document contains the commands and configuration steps used to prepare the Raspberry Pi as a dedicated LibreNMS monitoring server.
+This document contains the commands and configuration steps for using the Raspberry Pi as a dedicated LibreNMS monitoring server.
 
 ---
 
 ## System Update
 
-Purpose: Ensure base operating system packages are up to date.
-
 ```bash
 sudo apt update
-sudo apt upgrade -y
+sudo apt full-upgrade -y
 ```
 
----
-
-## Enable Headless Operation
-
-Purpose: Disable graphical desktop environment and run the system in CLI mode to reduce CPU and memory usage.
+## Install Required Packages
 
 ```bash
-sudo systemctl set-default multi-user.target
+sudo apt install acl ca-certificates curl fping git lsb-release mariadb-client mariadb-server mtr-tiny nginx-full nmap php-cli php-curl php-fpm php-gd php-gmp php-mbstring php-mysql php-snmp php-xml php-zip python3-command-runner python3-dotenv python3-pip python3-psutil python3-pymysql python3-redis python3-setuptools python3-systemd rrdtool snmp snmpd unzip wget whois
 ```
 
-Result:
-System boots without graphical desktop.
-
----
-
-## Disable Non-Essential Services
-
-Purpose: Reduce background resource usage and prevent unnecessary services from running on a monitoring server.
+## Add librenms user
 
 ```bash
-sudo systemctl disable --now avahi-daemon.service avahi-daemon.socket
-sudo systemctl disable --now bluetooth.service
+sudo useradd librenms -d /opt/librenms -M -r -s "$(which bash)"
 ```
 
-Result:
-Lower baseline CPU and memory usage.
-
----
-
-## Required Services for LibreNMS
-
-Purpose: Ensure required services remain enabled for monitoring operation.
+## Download LibreNMS
 
 ```bash
-sudo systemctl enable apache2
-sudo systemctl enable mariadb
-sudo systemctl enable snmpd
-sudo systemctl enable ssh
+cd /opt
+sudo git clone https://github.com/librenms/librenms.git
 ```
 
-Result:
-Core services start automatically on boot.
-
----
-
-## Verify Service Status
-
-Purpose: Confirm monitoring stack is operational.
+## Set permissions
 
 ```bash
-systemctl status apache2
-systemctl status mariadb
-systemctl status snmpd
+sudo chown -R librenms:librenms /opt/librenms
+sudo chmod 771 /opt/librenms
+sudo setfacl -d -m g::rwx /opt/librenms/rrd /opt/librenms/logs /opt/librenms/bootstrap/cache/ /opt/librenms/storage/
+sudo setfacl -R -m g::rwx /opt/librenms/rrd /opt/librenms/logs /opt/librenms/bootstrap/cache/ /opt/librenms/storage/
 ```
 
-Expected:
-Services active and running.
+## Install PHP dependencies
 
+Change to the LibreNMS user:
+```bash
+sudo su - librenms
+```
+Then run the composer wrapper script and exit back to the previous user:
+```bash
+./scripts/composer_wrapper.php install --no-dev
+exit
+```
+
+## Set the PHP timezone
+
+Find timezone from https://php.net/manual/en/timezones.php  
+Edit both files :
+```bash
+sudo nano /etc/php/8.4/fpm/php.ini
+```
+```bash
+sudo nano /etc/php/8.4/cli/php.ini
+```
+find ```;date.timezone =``` by ```ctrl+f``` and edit :
+```
+date.timezone = Asia/Kolkata
+```
+
+## Set the system timezone
+
+```bash
+sudo timedatectl set-timezone Asia/Kolkata
+```
 ---
-
-## Network Role
-
-The Raspberry Pi operates with separate logical roles:
-
-* Infrastructure VLAN interface used for SNMP polling.
-* Local LAN interface used for administrative access.
-
-LibreNMS polling traffic originates from the infrastructure VLAN interface.
